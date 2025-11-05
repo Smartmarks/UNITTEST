@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>উত্তরপত্র জমা দিন</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+        .file-input-container {
+            border: 2px dashed #d1d5db;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            position: relative;
+        }
+        .file-input-container:hover {
+            background-color: #f9fafb;
+        }
+        .file-input-container.dragging {
+             border-color: #60a5fa;
+             background-color: #eff6ff;
+        }
+        .file-input-container.has-file {
+            border-color: #4ade80;
+            background-color: #f0fdf4;
+        }
+        .file-input-container input[type="file"] {
+            display: none;
+        }
+        .file-name {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #4b5563;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-pink-50 flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-xl shadow-lg">
+
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-gray-800">আপনার উত্তরপত্র জমা দিন</h1>
+            <p class="mt-2 text-gray-500">প্রতিটি পৃষ্ঠার ছবি তুলে আপলোড করুন (সর্বোচ্চ 5MB প্রতি ছবি)</p>
+        </div>
+
+        <form id="uploadForm" class="mt-8 space-y-4">
+            <div id="file-inputs-wrapper" class="space-y-4">
+                <!-- Initial File Inputs Will Be Generated Here -->
+            </div>
+
+            <button type="button" id="addPageBtn" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                আরও পৃষ্ঠা যোগ করুন
+            </button>
+
+            <div class="pt-4">
+                 <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-300 disabled:cursor-not-allowed">
+                    জমা দিন
+                </button>
+            </div>
+        </form>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+            <div class="p-8 border w-96 shadow-lg rounded-md bg-white text-center">
+                <h3 class="text-2xl font-bold text-green-600">সফলভাবে জমা হয়েছে!</h3>
+                <div class="mt-2">
+                    <p class="text-gray-600">আপনার ফাইল আপলোড করা হয়েছে।</p>
+                </div>
+                <div class="mt-4">
+                    <button id="closeSuccessModal" class="px-4 py-2 bg-blue-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">বন্ধ করুন</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div id="errorModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+            <div class="p-8 border w-96 shadow-lg rounded-md bg-white text-center">
+                 <h3 class="text-2xl font-bold text-red-600">ত্রুটি!</h3>
+                <div class="mt-2">
+                    <p id="errorMessage" class="text-gray-600">কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।</p>
+                </div>
+                <div class="mt-4">
+                    <button id="closeErrorModal" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">বন্ধ করুন</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // !!! IMPORTANT !!!
+        // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSFi1iDoM3krWk9EhPJNqOekfwCCZvM-k76fkdXwKdnbFZyTHsddASZkyZBYAHuGbRKA/exec";
+
+        const uploadForm = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const fileInputsWrapper = document.getElementById('file-inputs-wrapper');
+        const addPageBtn = document.getElementById('addPageBtn');
+
+        const successModal = document.getElementById('successModal');
+        const errorModal = document.getElementById('errorModal');
+        const errorMessage = document.getElementById('errorMessage');
+        const closeSuccessModal = document.getElementById('closeSuccessModal');
+        const closeErrorModal = document.getElementById('closeErrorModal');
+
+        let pageCounter = 0;
+
+        const createFileInput = () => {
+            pageCounter++;
+            const pageId = `page-${pageCounter}`;
+            
+            const container = document.createElement('div');
+            container.id = `container-${pageId}`;
+
+            const label = document.createElement('label');
+            label.htmlFor = pageId;
+            label.className = 'file-input-container';
+
+            const content = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-gray-400"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.49"></path></svg>
+                <p class="mt-2 text-gray-600 font-semibold">পৃষ্ঠা ${pageCounter}</p>
+                <p class="text-sm text-gray-500">ছবি নির্বাচন করুন</p>
+                <span class="file-name" id="file-name-${pageId}"></span>
+            `;
+            label.innerHTML = content;
+
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.id = pageId;
+            input.name = `page_${pageCounter}`;
+            input.accept = 'image/*';
+            
+            label.appendChild(input);
+            container.appendChild(label);
+            fileInputsWrapper.appendChild(container);
+
+            // Event listener for file selection
+            input.addEventListener('change', (e) => {
+                const fileNameSpan = document.getElementById(`file-name-${pageId}`);
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    if (file.size > 5 * 1024 * 1024) { // 5MB check
+                        alert('ফাইল 5MB এর চেয়ে বড়। অনুগ্রহ করে অন্য ফাইল নির্বাচন করুন।');
+                        e.target.value = ''; // Reset the input
+                        fileNameSpan.textContent = '';
+                        label.classList.remove('has-file');
+                    } else {
+                        fileNameSpan.textContent = file.name;
+                        label.classList.add('has-file');
+                    }
+                } else {
+                    fileNameSpan.textContent = '';
+                    label.classList.remove('has-file');
+                }
+            });
+
+            // Drag and drop events
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                label.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                label.addEventListener(eventName, () => label.classList.add('dragging'), false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                label.addEventListener(eventName, () => label.classList.remove('dragging'), false);
+            });
+
+            label.addEventListener('drop', (e) => {
+                input.files = e.dataTransfer.files;
+                const changeEvent = new Event('change');
+                input.dispatchEvent(changeEvent);
+            }, false);
+        };
+
+        addPageBtn.addEventListener('click', createFileInput);
+        
+        // Create initial 3 pages
+        createFileInput();
+        createFileInput();
+        createFileInput();
+
+
+        uploadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (!SCRIPT_URL) {
+                errorMessage.textContent = 'The script URL is not set. Please follow the instructions.';
+                errorModal.classList.remove('hidden');
+                return;
+            }
+
+            const activeInputs = Array.from(fileInputsWrapper.querySelectorAll('input[type="file"]'))
+                                    .filter(input => input.files.length > 0);
+            
+            if (activeInputs.length === 0) {
+                alert('অনুগ্রহ করে অন্তত একটি ফাইল আপলোড করুন।');
+                return;
+            }
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'আপলোড হচ্ছে...';
+
+            const formData = new FormData();
+            
+            const filePromises = activeInputs.map(input => {
+                const file = input.files[0];
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const fileData = {
+                            fileName: file.name,
+                            mimeType: file.type,
+                            // base64 encode the file content
+                            content: event.target.result.split(',')[1] 
+                        };
+                        formData.append(input.name, JSON.stringify(fileData));
+                        resolve();
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            Promise.all(filePromises).then(() => {
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.result === "success") {
+                        successModal.classList.remove('hidden');
+                        uploadForm.reset();
+                        // Clear file names and styles
+                        fileInputsWrapper.querySelectorAll('.file-name').forEach(span => span.textContent = '');
+                        fileInputsWrapper.querySelectorAll('.file-input-container').forEach(container => container.classList.remove('has-file'));
+                    } else {
+                        throw new Error(data.message || 'Unknown error occurred.');
+                    }
+                })
+                .catch(err => {
+                    errorMessage.textContent = `An error occurred: ${err.message}`;
+                    errorModal.classList.remove('hidden');
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'জমা দিন';
+                });
+            });
+        });
+
+        // Modal close logic
+        closeSuccessModal.addEventListener('click', () => successModal.classList.add('hidden'));
+        closeErrorModal.addEventListener('click', () => errorModal.classList.add('hidden'));
+
+    </script>
+</body>
+</html>
