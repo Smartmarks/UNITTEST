@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Marks - Exam Dashboard</title>
+    <title>Smart Marks - Exam Hub</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,29 +22,11 @@
             },
         }
     </script>
-    <style>
-        /* Custom scrollbar for webkit browsers (Chrome, Safari) */
-        .scrollbar-thin::-webkit-scrollbar {
-            height: 6px;
-        }
-        .scrollbar-thin::-webkit-scrollbar-thumb {
-            background-color: #cbd5e1; /* cool-gray-300 */
-            border-radius: 10px;
-        }
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-            background-color: #94a3b8; /* cool-gray-400 */
-        }
-        /* For Firefox */
-        .scrollbar-thin {
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 #f1f5f9; /* thumb and track */
-        }
-    </style>
 </head>
 <body class="bg-gray-100 font-sans">
 
     <!-- Header with Smart Marks Branding -->
-    <header class="bg-white shadow-sm sticky top-0 z-10">
+    <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
@@ -54,27 +36,17 @@
                     </svg>
                     <span class="ml-2 text-2xl font-bold text-gray-800">Smart Marks</span>
                 </div>
-                <!-- You can add nav links here if needed -->
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-6">Exam Dashboard</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Available Exams</h1>
         
-        <!-- Premium Tabbed Interface -->
-        <div class="bg-white rounded-xl shadow-2xl overflow-hidden" style="height: calc(100vh - 160px);">
-            
-            <!-- Tab Buttons Container -->
-            <div id="tabs-container" class="flex items-center p-2 bg-gray-50 border-b border-gray-200 overflow-x-auto scrollbar-thin whitespace-nowrap">
-                <!-- Tabs will be dynamically inserted here by JavaScript -->
-            </div>
-
-            <!-- Content Area (Iframe) -->
-            <div id="content-container" class="w-full h-full overflow-hidden">
-                <iframe id="exam-iframe" src="" class="w-full h-full border-0" title="Exam Content"></iframe>
-            </div>
+        <!-- Exam Tiles Grid -->
+        <div id="exam-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Exam tiles will be dynamically inserted here by JavaScript -->
         </div>
     </main>
 
@@ -86,85 +58,90 @@
         
         const exams = [
             {
-                id: 'exam1',
                 title: 'CBSE Physics XI',
+                description: 'Motion in a Plane & Gravitation',
                 lang: 'en',
-                url: 'EXAM1.html' // The file you renamed!
+                url: 'EXAM1.html',
+                icon: 'atom'
             },
             {
-                id: 'exam2',
                 title: 'WBCHSE Optics ( সেট ১ )',
+                description: 'রে অপটিক্স - প্রতিফলন',
                 lang: 'bn',
-                url: 'EXAM2.html'
+                url: 'EXAM2.html',
+                icon: 'mirror'
             },
+            
             // --- Add new exams below this line ---
             // {
-            //     id: 'exam4',
             //     title: 'New Exam Title',
-            //     lang: 'en', // 'en' for English, 'bn' for Bengali
-            //     url: 'new_exam_file.html'
+            //     description: 'A short description of the exam',
+            //     lang: 'en', // 'en' or 'bn'
+            //     url: 'new_exam_file.html',
+            //     icon: 'book' // 'atom', 'mirror', 'book', or 'calc'
             // },
         ];
 
         // --- End of editable section ---
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabsContainer = document.getElementById('tabs-container');
-            const iframe = document.getElementById('exam-iframe');
-            let activeTabButton = null;
+        // SVG icons definition
+        const icons = {
+            atom: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.95-.69l1.07-3.292z" />
+                    </svg>`, // Using a star as a proxy for atom/physics
+            mirror: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                       <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                       <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                     </svg>`, // Using an eye as a proxy for optics
+            book: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v11.494m0-11.494A3.375 3.375 0 0115.375 9.75h.008v11.25H12M12 6.253A3.375 3.375 0 008.625 9.75H8.617v11.25H12m0-12.75V3.375c0-.621-.504-1.125-1.125-1.125H11.25" />
+                   </svg>`,
+            calc: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 7.5v1.5m0 3v1.5m0 3v1.5m3-9v1.5m0 3v1.5m0 3v1.5m3-9v1.5m0 3v1.5m0 3v1.5M3 9h18M3 15h18" />
+                   </svg>` // Simple calc icon
+        };
 
-            if (!tabsContainer || !iframe) {
-                console.error("Critical elements (tabs-container or exam-iframe) not found.");
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('exam-grid');
+            if (!grid) {
+                console.error("Exam grid container not found.");
                 return;
             }
 
-            // Function to load content into iframe and set active tab
-            function loadExam(exam, button) {
-                // Set iframe source
-                iframe.src = exam.url;
-
-                // Update active tab styling
-                if (activeTabButton) {
-                    activeTabButton.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
-                    activeTabButton.classList.add('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
-                }
+            // Dynamically create exam tiles
+            exams.forEach(exam => {
+                const card = document.createElement('a');
+                card.href = exam.url;
+                card.target = "_self"; // Open in the same tab, or use "_blank" for a new tab
                 
-                button.classList.add('bg-blue-600', 'text-white', 'shadow-md');
-                button.classList.remove('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
-                
-                activeTabButton = button;
-            }
-
-            // Dynamically create tab buttons
-            exams.forEach((exam, index) => {
-                const button = document.createElement('button');
-                button.textContent = exam.title;
-                
-                // Base classes for all tabs
-                let buttonClasses = 'py-3 px-5 text-sm font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 mx-1 flex-shrink-0';
+                // Base classes for all cards
+                let cardClasses = 'bg-white rounded-xl shadow-lg p-6 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50';
                 
                 // Add language-specific font
-                if (exam.lang === 'bn') {
-                    buttonClasses += ' font-bengali';
-                } else {
-                    buttonClasses += ' font-sans';
-                }
+                const langClass = exam.lang === 'bn' ? 'font-bengali' : 'font-sans';
+                card.className = `${cardClasses} ${langClass}`;
 
-                // Add default (non-active) styling
-                buttonClasses += ' text-gray-600 hover:bg-gray-100 hover:text-gray-800';
+                const iconHtml = icons[exam.icon] || icons['book']; // Default to 'book' icon
 
-                button.className = buttonClasses;
-
-                button.addEventListener('click', () => {
-                    loadExam(exam, button);
-                });
-
-                tabsContainer.appendChild(button);
-
-                // Load the first exam by default
-                if (index === 0) {
-                    loadExam(exam, button);
-                }
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="inline-block px-3 py-1 text-xs font-semibold uppercase rounded-full ${exam.lang === 'bn' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}">
+                                ${exam.lang === 'bn' ? 'বাংলা' : 'English'}
+                            </span>
+                            ${iconHtml}
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">${exam.title}</h2>
+                        <p class="text-gray-600 text-base">${exam.description}</p>
+                    </div>
+                    <div class="mt-8">
+                        <span class="text-base font-semibold text-blue-600 group-hover:text-blue-700">
+                            Start Exam &rarr;
+                        </span>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
             });
         });
     </script>
