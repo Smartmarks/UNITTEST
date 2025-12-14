@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class XII Physics - Ray Optics (Bengali)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        // Noto Sans Bengali is excellent for legibility
+                        sans: ['Noto Sans Bengali', 'Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .math-symbol sub {
+            font-size: 0.7em;
+            vertical-align: sub;
+        }
+        .math-symbol sup {
+            font-size: 0.7em;
+            vertical-align: super;
+        }
+        /* Custom fraction style for HTML */
+        .fraction {
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            margin: 0 2px;
+            font-size: 0.9em;
+        }
+        .fraction > span {
+            display: block;
+            padding: 0 2px;
+        }
+        .fraction span.numerator {
+            border-bottom: 1px solid currentColor;
+        }
+        .fraction span.denominator {
+            border-top: 1px solid transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+        
+        <header class="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-6 md:p-8 shadow-md">
+            <h1 class="text-2xl md:text-4xl font-bold mb-2">দ্বাদশ শ্রেণি – পদার্থবিদ্যা (Class XII)</h1>
+            <h2 class="text-lg md:text-2xl font-light opacity-90">চতুর্থ সেমিস্টার: রশ্মি আলোকবিজ্ঞান (Ray Optics)</h2>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-6 text-sm font-medium border-t border-blue-400 pt-4">
+                <span>পূর্ণমান (Max Marks): <strong>40</strong></span>
+                <span class="mt-2 sm:mt-0">সময় (Time): <strong>১ ঘণ্টা ৩০ মিনিট</strong></span>
+            </div>
+        </header>
+
+        <main>
+            <section class="p-6 md:p-8 border-b border-gray-200 bg-blue-50/50">
+                <h3 class="text-lg font-semibold text-blue-800 mb-3">নির্দেশাবলি (General Instructions):</h3>
+                <ol class="list-decimal list-inside space-y-2 text-gray-700 text-sm md:text-base">
+                    <li>সমস্ত প্রশ্নের উত্তর দেওয়া আবশ্যিক।</li>
+                    <li>প্রয়োজনীয় ক্ষেত্রে পরিচ্ছন্ন চিত্র অঙ্কন করো।</li>
+                    <li>প্রচলিত প্রতীক ও এককগুলি যথাযথভাবে ব্যবহার করো।</li>
+                    <li>গণনার ক্ষেত্রে সঠিক তাৎপর্যপূর্ণ অঙ্কসংখ্যা (Significant figures) বজায় রাখো।</li>
+                </ol>
+            </section>
+
+            <section class="p-6 md:p-8 border-b border-gray-200">
+                <div class="flex justify-between items-baseline mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-900">বিভাগ - ক (Group A)</h2>
+                    <span class="text-sm font-bold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">2 × 5 = 10 Marks</span>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">1.</span>
+                        <p class="text-base md:text-lg leading-relaxed text-gray-800">
+                            সদবিম্ব ও অসদবিম্বের মধ্যে দুটি মূল পার্থক্য লেখো।
+                        </p>
+                    </div>
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">2.</span>
+                        <p class="text-base md:text-lg leading-relaxed text-gray-800 math-symbol">
+                            সংকট কোণ (Critical Angle) কাকে বলে? এর সাথে মাধ্যমের প্রতিসরাঙ্কের সম্পর্কটি লেখো।
+                        </p>
+                    </div>
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">3.</span>
+                        <p class="text-base md:text-lg leading-relaxed text-gray-800">
+                            একটি উত্তল লেন্সের ফোকাস দৈর্ঘ্য 20 cm। লেন্সটির ক্ষমতা (Power) কত?
+                        </p>
+                    </div>
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">4.</span>
+                        <p class="text-base md:text-lg leading-relaxed text-gray-800">
+                            আলোর বিচ্ছুরণ (Dispersion of light) বলতে কী বোঝো?
+                        </p>
+                    </div>
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">5.</span>
+                        <p class="text-base md:text-lg leading-relaxed text-gray-800">
+                            বিপদ সংকেত হিসেবে লাল আলো ব্যবহার করা হয় কেন? র‍্যালের বিক্ষেপণ সূত্রানুযায়ী ব্যাখ্যা করো।
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="p-6 md:p-8 border-b border-gray-200">
+                <div class="flex justify-between items-baseline mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-900">বিভাগ - খ (Group B)</h2>
+                    <span class="text-sm font-bold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">3 × 5 = 15 Marks</span>
+                </div>
+
+                <div class="space-y-6">
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">6.</span>
+                        <p class="text-base md:text-lg leading-relaxed text-gray-800 math-symbol">
+                            প্রমাণ করো যে, ছোটো উন্মেষযুক্ত গোলীয় দর্পণের ক্ষেত্রে ফোকাস দূরত্ব বক্রতা ব্যাসার্ধের অর্ধেক (<i>f</i> = R/2)।
+                        </p>
+                    </div>
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">7.</span>
+                        <p class="text-base md:text-lg leading-relaxed text-gray-800 math-symbol">
+                            একটি প্রিজমের উপাদানের প্রতিসরাঙ্ক &radic;2 এবং প্রিজম কোণ 60°। ন্যূনতম চ্যুতিকোণের (minimum deviation) মান নির্ণয় করো।
+                        </p>
+                    </div>
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">8.</span>
+                        <p class="text-base md:text-lg leading-relaxed text-gray-800">
+                            অভ্যন্তরীণ পূর্ণ প্রতিফলন (Total Internal Reflection) কাকে বলে? এটি ঘটার দুটি শর্ত উল্লেখ করো।
+                        </p>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">9.</span>
+                        <p class="text-base md:text-lg leading-relaxed text-gray-800">
+                            মরীচিকা (Mirage) সৃষ্টির কারণ চিত্রসহ ব্যাখ্যা করো।
+                        </p>
+                    </div>
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">10.</span>
+                        <p class="text-base md:text-lg leading-relaxed text-gray-800">
+                            যৌগিক অণুবীক্ষণ যন্ত্রের (Compound Microscope) কার্যনীতি রশ্মিচিত্রের সাহায্যে দেখাও (বিবর্ধন নির্ণয়ের প্রয়োজন নেই)।
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="p-6 md:p-8 border-b border-gray-200">
+                <div class="flex justify-between items-baseline mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-900">বিভাগ - গ (Group C)</h2>
+                    <span class="text-sm font-bold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">5 × 3 = 15 Marks</span>
+                </div>
+
+                <div class="space-y-8">
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">11.</span>
+                        <div class="text-base md:text-lg leading-relaxed text-gray-800 math-symbol w-full">
+                            <p class="mb-2">লেন্স মেকারের সূত্রটি প্রতিষ্ঠা করো:</p>
+                            <div class="bg-gray-50 p-4 rounded border border-gray-200 text-center my-3 font-mono text-lg text-blue-900">
+                                <span class="fraction"><span class="numerator">1</span><span class="denominator">f</span></span>
+                                = (&mu; - 1) 
+                                <span class="text-2xl">(</span>
+                                <span class="fraction"><span class="numerator">1</span><span class="denominator">R<sub>1</sub></span></span>
+                                - 
+                                <span class="fraction"><span class="numerator">1</span><span class="denominator">R<sub>2</sub></span></span>
+                                <span class="text-2xl">)</span>
+                            </div>
+                            <p class="text-sm text-gray-600">(যেখানে চিহ্নগুলি প্রচলিত অর্থ বহন করে)</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">12.</span>
+                        <div class="text-base md:text-lg leading-relaxed text-gray-800 math-symbol w-full">
+                            <ol class="list-[lower-alpha] list-outside ml-6 space-y-4">
+                                <li>
+                                    ন্যূনতম চ্যুতির ক্ষেত্রে প্রিজমের উপাদানের প্রতিসরাঙ্কের সমীকরণটি প্রতিষ্ঠা করো:
+                                    <br>
+                                    <span class="font-mono bg-gray-100 px-2 py-1 rounded mt-2 inline-block">
+                                        &mu; = sin((A + &delta;<sub>m</sub>)/2) / sin(A/2)
+                                    </span>
+                                </li>
+                                <li>অপটিক্যাল ফাইবার বা আলোকতন্তুর একটি ব্যবহারিক প্রয়োগ লেখো।</li>
+                            </ol>
+                            <p class="text-right text-sm font-bold text-gray-500 mt-2">(4 + 1 = 5)</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <span class="font-bold text-lg mr-3 text-blue-600 min-w-[24px]">13.</span>
+                        <div class="text-base md:text-lg leading-relaxed text-gray-800 math-symbol w-full">
+                            <ol class="list-[lower-alpha] list-outside ml-6 space-y-4">
+                                <li>
+                                    গোলীয় তলে আলোর প্রতিসরণের ক্ষেত্রে দেখাও যে:
+                                    <br>
+                                    <span class="font-mono bg-gray-100 px-2 py-1 rounded mt-2 inline-block">
+                                        &mu;<sub>2</sub>/v - &mu;<sub>1</sub>/u = (&mu;<sub>2</sub> - &mu;<sub>1</sub>)/R
+                                    </span>
+                                    <br>
+                                    <span class="text-sm text-gray-600">(উত্তল তলে লঘু থেকে ঘন মাধ্যমে প্রতিসরণ ধরে নাও)</span>
+                                </li>
+                                <li>
+                                    একটি সমোত্তল লেন্সের (Equi-convex lens) তলের বক্রতা ব্যাসার্ধ 10 cm এবং উপাদানের প্রতিসরাঙ্ক 1.5 হলে, লেন্সটির ফোকাস দৈর্ঘ্য কত হবে?
+                                </li>
+                            </ol>
+                            <p class="text-right text-sm font-bold text-gray-500 mt-2">(3 + 2 = 5)</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <footer class="p-6 md:p-8 text-center bg-gray-50 border-t border-gray-100">
+            <button onclick="window.print()" class="w-full sm:w-auto bg-blue-600 text-white font-bold py-3 px-10 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 transform hover:scale-105 flex items-center justify-center mx-auto gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                Print Question Paper
+            </button>
+        </footer>
+        <!-- Footer / Submit Section -->
+        <footer class="p-6 md:p-8 text-center bg-gray-50 border-t border-gray-100">
+            <form action="submit.html" method="GET">
+                <button type="submit" class="w-full sm:w-auto bg-blue-600 text-white font-bold py-3 px-10 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 transform hover:scale-105">
+                    Submit Paper
+                </button>
+            </form>
+        </footer>
+
+    </div>
+
+</body>
+</html>
